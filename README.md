@@ -28,8 +28,8 @@ Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for det
 This project was created by Crato. There are no Official Youtube , Instagram , etc. accounts yet. I will update here.
 ## Support
 If you have any questions, comments, or issues with this project, please feel free to reach out to us on social media:<br>
-[Twitter](https://twitter.com/yourhandle)<br>
-[Facebook](https://www.facebook.com/yourpage)<br>
-[LinkedIn](https://www.linkedin.com/in/yourprofile)<br>
-[Instagram](https://www.instagram.com/yourhandle)<br>
+[Twitter](https://twitter.com)<br>
+[Facebook](https://www.facebook.com)<br>
+[LinkedIn](https://www.linkedin.com)<br>
+[Instagram](https://www.instagram.com)<br>
 We would love to hear from you and help you out with any problems you encounter.<br>
