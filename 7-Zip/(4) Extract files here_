@@ -1,0 +1,14 @@
+#!/bin/bash
+gnome-terminal --title=7z_Extracting_Files_Here --geometry=55X5+300+150 -- bash -c '
+LENGTH=$(echo "$#")
+CURRENTPATH=$(echo "$PWD")
+for (( i=1 ; i<=$LENGTH ; i++ ))
+do
+	cd "$CURRENTPATH"
+	SELECTEDPATH="$(echo "$CURRENTPATH"/"${!i}")"
+	cd ~/.local/share/nautilus/scripts/7-Zip
+	cd "$(cat dir7z)"
+	./7zzs x "$SELECTEDPATH" -o"$CURRENTPATH"
+done
+#read abc
+' bash "$@"

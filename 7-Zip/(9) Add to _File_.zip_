@@ -1,0 +1,24 @@
+#!/bin/bash
+gnome-terminal --hide-menubar --title=Compressing_To_Zip --geometry=50X2 -x bash -c '
+LENGTH=$#
+declare -a patharr
+for (( i=1 ; i<=$LENGTH ; i++ ))
+do
+patharr[( $i-1 )]=$(echo "$PWD"/"${!i}")
+done
+CURRENTPATH=$(echo "$PWD")
+FILENAME="$(echo "$1")"
+FILENAMEFULL="$(echo "$FILENAME"".zip")"
+while true ; do
+if [[ -e  "$FILENAMEFULL" ]]; then
+	FILENAME="$(echo "$FILENAME"_New)"
+	FILENAMEFULL="$(echo "$FILENAME"".zip")"
+else
+	break
+fi
+done
+cd ~/.local/share/nautilus/scripts/7-Zip
+cd "$(cat dir7z)"
+./7zz a -tzip -sae "$CURRENTPATH"/"$FILENAMEFULL" "${patharr[@]}"
+#read abc
+' bash "$@"

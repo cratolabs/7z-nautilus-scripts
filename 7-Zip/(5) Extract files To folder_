@@ -1,0 +1,24 @@
+#!/bin/bash
+gnome-terminal --title=7z_Extracting_Files_To_Folder --geometry=55X5+300+150 -- bash -c '
+LENGTH=$(echo "$#")
+CURRENTPATH=$(echo "$PWD")
+for (( i=1 ; i<=$LENGTH ; i++ ))
+do
+	cd "$CURRENTPATH"
+	SELECTEDPATH="$(echo "$CURRENTPATH"/"${!i}")"
+	FILENAME="$(echo "${!i}")"
+	FILENAME="${FILENAME%.*}"
+	FILENAME="$(echo "$FILENAME"_)"
+	while true ; do
+		if [[ -e  "$FILENAME" ]]; then
+			FILENAME="$(echo "$FILENAME"_New)"
+		else
+			break
+		fi
+	done
+	cd ~/.local/share/nautilus/scripts/7-Zip
+	cd "$(cat dir7z)"
+	./7zzs x "$SELECTEDPATH" -o"$CURRENTPATH"/"$FILENAME"
+done
+#read abc
+' bash "$@"
