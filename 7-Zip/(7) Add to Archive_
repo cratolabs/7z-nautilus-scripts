@@ -1,0 +1,118 @@
+#!/bin/bash
+gnome-terminal --hide-menubar --title=Compressinf_To_7z --geometry=100X25+300+150 -- bash -c '
+LENGTH=$#
+declare -a patharr
+for (( i=1 ; i<=$LENGTH ; i++ ))
+do
+patharr[( $i-1 )]=$(echo "$PWD"/"${!i}")
+done
+CURRENTPATH=$(echo "$PWD")
+cd ~/.local/share/nautilus/scripts/7-Zip
+cd "$(cat dir7z)"
+echo -e "Destination=$CURRENTPATH\nFileName=$(echo $1)"
+echo ":::::::::::::::::::::::::::::::::::"
+echo "Type/Paste Destination Folder
+Press Enter for same folder"
+read "DESTINATION"
+if [[ "$DESTINATION" = "" ]]; then
+	DESTINATION="$CURRENTPATH"
+fi
+clear
+echo -e "Destination=$DESTINATION\nFileName=$(echo $1)"
+echo ":::::::::::::::::::::::::::::::::::"
+echo "Type Filename (without extension type)
+Press Enter for default"
+read "FILENAME"
+if [[ "$FILENAME" = "" ]]; then
+	FILENAME="$(echo "$1")"
+else
+	FILENAME="$FILENAME"
+fi
+clear
+################################
+echo -e "Destination=$DESTINATION\nFileName=$FILENAME"
+echo ":::::::::::::::::::::::::::::::::::"
+echo "Type Compression type: 7z, xz, bzip2, gzip, tar, zip and wim 
+Press Enter for Default 7z"
+read "EXT"
+if [[ "$EXT" = "" ]]; then
+	EXT="7z"
+fi
+clear
+echo -e "Destination=$DESTINATION\nFileName=$FILENAME\nType=$EXT"
+echo ":::::::::::::::::::::::::::::::::::"
+echo "Select Compression level:
+Type 0 for Do not Compress mode
+Type 1 for Fastest - Low compression mode
+Type 3 for Fast compression mode
+Type 5 for Normal compression mode(Default)
+Type 7 for Maximum compression mode
+Type 9 for Ultra compression mode
+Press Enter for Default (or) 0 , 1 , 3 , 5 , 7 , 9 accordingly
+ "
+read "COMPLEVEL"
+if [[ "$COMPLEVEL" = "" ]]; then
+	COMPLEVEL=5
+fi
+clear
+echo -e "Destination=$DESTINATION\nFileName=$FILENAME\nType=$EXT\nCompressionLevel=$COMPLEVEL"
+echo ":::::::::::::::::::::::::::::::::::"
+echo "Select Split volume size
+syntax:  -v{size}{k or m or g} 
+e.g: -v20k (or) -v1m (or) -v1g etc
+For Volumes of different sizes:
+e.g: -v10k -v1m -v20m (or) -v100m -v200m -v300m 
+Press enter if not want to split"
+read "VOL"
+clear
+echo -e "Destination=$DESTINATION\nFileName=$FILENAME\nType=$EXT\nCompressionLevel=$COMPLEVEL\nVolumes=$VOL"
+echo ":::::::::::::::::::::::::::::::::::"
+echo "Type y to set password , it will ask password later
+Press Enter for no Password"
+read "PASS"
+if [[ "${PASS^}" = "Y" ]]; then
+	PASS2=-p
+	PASS="ON"
+	clear
+	echo -e "Destination=$DESTINATION\nFileName=$FILENAME\nType=$EXT\nCompressionLevel=$COMPLEVEL \nVolumes=$VOL\nPasswordStatus=$PASS"
+	echo ":::::::::::::::::::::::::::::::::::"
+	echo "Encrypt File Names?
+	Press Enter for No
+	Type y and press enter to encrypt FileNames"
+	read FNENC
+	if [[ "${FNENC^}" = "Y" ]]; then
+		FNENC="-mhe"
+		FNENCSTAT="ON"
+	else
+		FNENC=""
+		FNENCSTAT="OFF"
+	fi
+else
+	PASS="OFF"
+	PASS2=""
+	FNENC=""
+	FNENCSTAT="OFF"
+fi
+clear
+echo -e "Destination=$DESTINATION\nFileName=$FILENAME\nType=$EXT\nCompressionLevel=$COMPLEVEL \nVolumes=$VOL\nPasswordStatus=$PASS\nFileNameEncryption="$FNENCSTAT""
+echo ":::::::::::::::::::::::::::::::::::"
+echo "Enter Extra Commands If you want to add
+Press Enter Otherwise"
+read "EXTRACOMMANDS"
+echo -e "Destination=$DESTINATION\nFileName=$FILENAME\nType=$EXT\nCompressionLevel=$COMPLEVEL \nVolumes=$VOL\nPasswordStatus=$PASS\nFileNameEncryption="$FNENCSTAT"\nExtraCommands="$EXTRACOMMANDS""
+echo "Files To be added: "$@""
+echo ":::::::::::::::::::::::::::::::::::"
+echo "Press Enter to Continue
+press any other key except Enter to cancel"
+read "WHATTODO"
+if [[ "$WHATTODO" != "" ]]; then
+	exit
+fi
+OUTPUT=$(echo "$DESTINATION"/"$FILENAME"".""$EXT")
+EXTRAFEATURES=$(echo -mx"$COMPLEVEL" "$VOL" $PASS2 "$FNENC" "$EXTRACOMMANDS")
+EXTRAFEATURES=$(echo "$EXTRAFEATURES" | tr -s " ")
+EXTRAFEATURES=${EXTRAFEATURES%% }
+EXTRAFEATURES=${EXTRAFEATURES## }
+./7zzs a -t"$EXT" -sae "$OUTPUT" "${patharr[@]}" $EXTRAFEATURES
+#read abc
+' bash "$@"

@@ -1,0 +1,14 @@
+#!/bin/bash
+LENGTH=$#
+for (( i=1 ; i<=$LENGTH ; i++ ))
+do
+gnome-terminal --title=Opened_Archive_As#:e --geometry=100X25+300+150 -x bash -c '
+CURRENTPATH=$(echo "$PWD")
+cd ~/.local/share/nautilus/scripts/7-Zip
+cd "$(cat dir7z)"
+echo "Opening $1 as '#:e'"
+echo "========================="
+./7zzs l -ba "$CURRENTPATH"/"$1" -t#:e | grep -oP "\S+$"
+read abc
+' bash "${!i}"
+done

@@ -1,0 +1,29 @@
+#!/bin/bash
+gnome-terminal --title=7z_is_Extracting_Files --geometry=100X25+300+150 -x bash -c '
+LENGTH=$(echo "$#")
+CURRENTPATH=$(echo "$PWD")
+for (( i=1 ; i<=$LENGTH ; i++ ))
+do
+	cd "$CURRENTPATH"
+	SELECTEDPATH=$(echo "$CURRENTPATH"/"${!i}")
+	FILENAME="$(echo "${!i}")"
+	FILENAME="${FILENAME%.*}"
+	FILENAME="$(echo "$FILENAME""_")"
+	while true ; do
+		if [[ -e  "$FILENAME" ]]; then
+			FILENAME=$(echo "$FILENAME""_New")
+		else
+			break
+		fi
+	done
+	cd ~/.local/share/nautilus/scripts/7-Zip
+	cd "$(cat dir7z)"
+	./7zzs l "$SELECTEDPATH"
+	echo "Press Enter to Extract (or) Press anything else to quit"
+	read abc
+	if [[ -z "$abc" ]]; then
+	./7zzs x "$SELECTEDPATH" -o"$CURRENTPATH"/"$FILENAME" -t#:e
+	fi
+done
+#read abc
+' bash "$@"
