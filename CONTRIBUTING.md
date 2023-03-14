@@ -1,4 +1,4 @@
-# Contributing to [7z-nautilus-scripts]
+# Contributing to [7z-nautilus-scripts](https://github.com/cratolabs/7z-nautilus-scripts)
 
 Thank you for your interest in contributing to our project! We welcome all contributions from the community.
 
